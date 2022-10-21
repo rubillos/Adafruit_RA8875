@@ -608,20 +608,6 @@ boolean Adafruit_RA8875::waitPoll(uint8_t regname, uint8_t waitflag) {
   return false; // MEMEFIX: yeah i know, unreached! - add timeout?
 }
 
-void Adafruit_RA8875::Chk_Busy(void) {
-	uint8_t temp; 	
-	do {
-	  temp=readStatus();
-	} while((temp&0x80)==0x80);		   
-}
-
-void Adafruit_RA8875::Chk_BTE_Busy(void) {
-	uint8_t temp; 	
-	do {
-	  temp=readStatus();
-	} while((temp&0x40)==0x40);		   
-}
-
 /**************************************************************************/
 /*!
       Sets the current X/Y position on the display before drawing
@@ -1531,6 +1517,9 @@ boolean Adafruit_RA8875::touchRead(uint16_t *x, uint16_t *y) {
   tx |= temp & 0x03;        // get the bottom x bits
   ty |= (temp >> 2) & 0x03; // get the bottom y bits
 
+  // This fixes some sort of hardware bug where the values returned from
+  // the x and y ADCs go through the range 0-255, then jump to 768-1023.
+  // We clip off the top bit to get a range of 0-511.
   tx &= 0x1FF;
   ty &= 0x1FF;
 

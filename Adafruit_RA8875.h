@@ -245,8 +245,6 @@ public:
   void writeCommand(uint8_t d);
   uint8_t readStatus(void);
   boolean waitPoll(uint8_t r, uint8_t f);
-  void Chk_Busy(void);
-  void Chk_BTE_Busy(void);
 
   uint16_t width(void);
   uint16_t height(void);
